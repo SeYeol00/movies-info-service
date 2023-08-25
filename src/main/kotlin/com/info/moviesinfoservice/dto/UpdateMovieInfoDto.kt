@@ -1,5 +1,6 @@
 package com.info.moviesinfoservice.dto
 
+import com.info.moviesinfoservice.domain.MovieInfo
 import java.time.LocalDate
 
 data class UpdateMovieInfoDto(
@@ -13,19 +14,14 @@ data class UpdateMovieInfoDto(
 ) {
     companion object {
         fun of(
-            movieInfoId: String,
-            name: String,
-            year: Int,
-            cast: MutableList<String>,
-            releaseDate: LocalDate
-        ): UpdateMovieInfoDto {
+            movieInfo: MovieInfo
+        ):UpdateMovieInfoDto{
             return UpdateMovieInfoDto(
-                movieInfoId,
-                name,
-                year,
-                cast,
-                releaseDate
+                movieInfo.movieInfoId,
+                movieInfo.name,
+                movieInfo.year,
+                movieInfo.cast,
+                movieInfo.releaseDate
             )
-        }
     }
 }

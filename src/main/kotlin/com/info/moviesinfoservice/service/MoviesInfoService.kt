@@ -7,7 +7,7 @@ import com.info.moviesinfoservice.dto.UpdateMovieInfoDto
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-interface MovieInfoService {
+interface MoviesInfoService {
     fun addMovieInfo(addMovieInfo: AddMovieInfoDto): Mono<MovieInfo>
     fun getAllMovieInfos():Flux<GetMovieInfoDto>
     fun getMovieInfoById(id:String):Mono<GetMovieInfoDto>

@@ -1,32 +1,29 @@
 package com.info.moviesinfoservice.dto
 
+import com.info.moviesinfoservice.domain.MovieInfo
 import java.time.LocalDate
 
 
 data class GetMovieInfoDto(
 
-    val movieInfoId:String,
+    private val movieInfoId:String,
 
-    val name:String,
+    private val name:String,
 
-    val year:Int,
-    val cast:MutableList<String>,
-    val releaseDate: LocalDate
+    private val year:Int,
+    private val cast:MutableList<String>,
+    private val releaseDate: LocalDate
 ){
     companion object{
         fun of(
-            movieInfoId:String,
-            name:String,
-            year:Int,
-            cast:MutableList<String>,
-            releaseDate: LocalDate
+            movieInfo: MovieInfo
         ):GetMovieInfoDto{
             return GetMovieInfoDto(
-                movieInfoId,
-                name,
-                year,
-                cast,
-                releaseDate
+                movieInfo.movieInfoId,
+                movieInfo.name,
+                movieInfo.year,
+                movieInfo.cast,
+                movieInfo.releaseDate
             )
         }
     }

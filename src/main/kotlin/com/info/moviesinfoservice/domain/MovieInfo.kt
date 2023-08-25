@@ -1,5 +1,6 @@
 package com.info.moviesinfoservice.domain
 
+import com.info.moviesinfoservice.dto.UpdateMovieInfoDto
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Positive
 import lombok.Data
@@ -12,13 +13,13 @@ import java.time.LocalDate
 data class MovieInfo(
 
     @Id
-    val movieInfoId:String,
+    var movieInfoId:String,
     @NotBlank(message = "영화 제목은 반드시 포함 되어야 합니다.")
-    val name:String,
+    var name:String,
     @Positive(message = "개봉 연도는 양수여야 합니다.")
-    val year:Int,
-    val cast:MutableList<@NotBlank(message = "출연 배우는 제공되어야 합니다.") String>,
-    val releaseDate:LocalDate
+    var year:Int,
+    var cast:MutableList<@NotBlank(message = "출연 배우는 제공되어야 합니다.") String>,
+    var releaseDate:LocalDate
 ) {
 
     companion object{
@@ -37,5 +38,13 @@ data class MovieInfo(
                 releaseDate
             )
         }
+    }
+
+    fun update(updateMovieInfoDto: UpdateMovieInfoDto){
+        this.movieInfoId = updateMovieInfoDto.movieInfoId
+        this.name = updateMovieInfoDto.name
+        this.year = updateMovieInfoDto.year
+        this.cast = updateMovieInfoDto.cast
+        this.releaseDate = updateMovieInfoDto.releaseDate
     }
 }

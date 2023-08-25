@@ -11,4 +11,5 @@ interface MovieInfoRepository: ReactiveMongoRepository<MovieInfo,String> {
     fun findByYear(year: Int): Flux<MovieInfo>
 
     fun findByName(name:String): Mono<MovieInfo>
+
 }
