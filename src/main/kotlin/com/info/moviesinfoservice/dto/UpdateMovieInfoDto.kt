@@ -15,7 +15,7 @@ data class UpdateMovieInfoDto(
     companion object {
         fun of(
             movieInfo: MovieInfo
-        ):UpdateMovieInfoDto{
+        ): UpdateMovieInfoDto {
             return UpdateMovieInfoDto(
                 movieInfo.movieInfoId,
                 movieInfo.name,
@@ -23,5 +23,6 @@ data class UpdateMovieInfoDto(
                 movieInfo.cast,
                 movieInfo.releaseDate
             )
+        }
     }
 }
