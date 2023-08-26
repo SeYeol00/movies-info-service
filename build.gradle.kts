@@ -30,6 +30,8 @@ dependencies {
     testImplementation("io.projectreactor:reactor-test")
     // https://mvnrepository.com/artifact/de.flapdoodle.embed/de.flapdoodle.embed.mongo
     testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.7.0")
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 }

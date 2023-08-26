@@ -6,13 +6,13 @@ import java.time.LocalDate
 
 data class GetMovieInfoDto(
 
-    private val movieInfoId:String,
+    val movieInfoId:String,
 
-    private val name:String,
+    val name:String,
 
-    private val year:Int,
-    private val cast:MutableList<String>,
-    private val releaseDate: LocalDate
+    val year:Int,
+    val cast:MutableList<String>,
+    val releaseDate: LocalDate
 ){
     companion object{
         fun of(

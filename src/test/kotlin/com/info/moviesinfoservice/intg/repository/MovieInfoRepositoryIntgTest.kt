@@ -33,14 +33,14 @@ class MovieInfoRepositoryIntgTest {
                 "a",
                 "배트맨 비긴스",
                 2005,
-                mutableListOf("C크리스찬 베일", "마이클 케인"),
+                mutableListOf("크리스찬 베일", "마이클 케인"),
                 LocalDate.parse("2005-06-15")
             ),
             MovieInfo(
                 "b",
                 "다크나이트",
                 2008,
-                mutableListOf("C크리스찬 베일", "히스 레저"),
+                mutableListOf("크리스찬 베일", "히스 레저"),
                 LocalDate.parse("2008-07-18")
             ),
             MovieInfo(

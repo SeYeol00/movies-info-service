@@ -24,7 +24,7 @@ class MoviesInfoController(
 
 
     @GetMapping("/movieinfos")
-    fun getAllMovieInfos(@RequestParam(value = "year", required = false)year:Int): Flux<GetMovieInfoDto> {
+    fun getAllMovieInfos(@RequestParam(value = "year", required = false)year:Int?): Flux<GetMovieInfoDto> {
         if (year != null){
             return moviesInfoService.getMovieInfoByYear(year).log()
         }
