@@ -77,13 +77,14 @@ class MoviesInfoController(
             // Sink에 전달해서 SSE api에 대기
             .doOnNext{
                 saved
-                -> moviesInfoSink.tryEmitNext(saved
-                )
-            }
+                ->
+                    moviesInfoSink.tryEmitNext(saved)
+                }
             .log()
+            }
+
     }
     // publish that movie to something
     // Sink 클래스를 쓸 것임
     // -> Subscriber와 Publisher 둘 다 가능하여 SSE를 지원한다.
     // Subscriber to this movie info
-}

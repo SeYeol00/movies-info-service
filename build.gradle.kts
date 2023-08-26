@@ -36,6 +36,9 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     // https://mvnrepository.com/artifact/io.mockk/mockk
     testImplementation("io.mockk:mockk:1.12.4")
+    // https://mvnrepository.com/artifact/org.mockito.kotlin/mockito-kotlin
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+
 
 }
 
