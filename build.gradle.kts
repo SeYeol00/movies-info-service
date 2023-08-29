@@ -26,16 +26,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-    implementation("org.slf4j:slf4j-api:1.7.32")
-    implementation("ch.qos.logback:logback-classic:1.2.6")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     // https://mvnrepository.com/artifact/de.flapdoodle.embed/de.flapdoodle.embed.mongo
     testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.7.0")
-    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
     // https://mvnrepository.com/artifact/io.mockk/mockk
     testImplementation("io.mockk:mockk:1.12.4")
     // https://mvnrepository.com/artifact/org.mockito.kotlin/mockito-kotlin

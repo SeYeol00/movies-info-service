@@ -4,9 +4,13 @@ import com.info.moviesinfoservice.controller.MoviesInfoController
 import com.info.moviesinfoservice.domain.MovieInfo
 import com.info.moviesinfoservice.dto.AddMovieInfoDto
 import com.info.moviesinfoservice.dto.GetMovieInfoDto
+import com.info.moviesinfoservice.dto.UpdateMovieInfoDto
 import com.info.moviesinfoservice.service.MoviesInfoService
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.*
+import org.mockito.kotlin.isA
+import org.mockito.kotlin.isNotNull
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
@@ -20,9 +24,9 @@ import java.time.LocalDate
 @WebFluxTest(controllers = [MoviesInfoController::class])
 @AutoConfigureWebTestClient
 class MovieInfoControllerUnitTest {
-    @Autowired
-    private val webTestClient: WebTestClient? = null
 
+    @Autowired
+    private lateinit var webTestClient: WebTestClient
 
     // 모키토 프레임워크가 아닌 스프링 프레임워크 어노테이션
     // 스프링 어플리케이션 컨텍스트 내에서 빈의 모의 객체를 생성하는데 사용된다.
@@ -34,8 +38,8 @@ class MovieInfoControllerUnitTest {
 
     //코틀린에서 모키토를 쓰려면 모키토 코틀린이 따로 있다!!!!
 //    @MockBean
-    @Autowired
-    private val mockMovieService: MoviesInfoService = mock()
+    @MockBean
+    private lateinit var moviesInfoService: MoviesInfoService
 
     companion object{
         val MOVIES_INFO_URL:String = "/v1/movieinfos"
@@ -75,11 +79,11 @@ class MovieInfoControllerUnitTest {
 //            .returns(Flux.fromIterable(movieInfos))
 
         // 모키토 프레임워크 when함수로 Mock으로 주입된 객체의 함수의 동작 지정
-        whenever(mockMovieService.getAllMovieInfos()) // list를 파라미터로 보내면 Flux로 변환
+        whenever(moviesInfoService.getAllMovieInfos()) // list를 파라미터로 보내면 Flux로 변환
             .thenReturn(Flux.fromIterable(movieInfos))
 
         //when
-        webTestClient!!
+        webTestClient
             .get()
             .uri(MOVIES_INFO_URL)
             .exchange()
@@ -104,13 +108,13 @@ class MovieInfoControllerUnitTest {
             LocalDate.parse("2012-07-20")
         )
 
-            whenever(mockMovieService.getMovieInfoById(
-            anyString()
-        ))
+        // mocking and stubbing
+
+        whenever(moviesInfoService.getMovieInfoById(isA()))
             .thenReturn(Mono.just(getMovieInfoDto))
 
         //when
-        webTestClient!!
+        webTestClient
             .get()
             .uri("$MOVIES_INFO_URL/$id")
             .exchange()
@@ -138,7 +142,7 @@ class MovieInfoControllerUnitTest {
 
         //코틀린에서 모키토를 쓰려면 모키토 코틀린이 따로 있다!!!!
 
-        whenever(mockMovieService.addMovieInfo(
+        whenever(moviesInfoService.addMovieInfo(
             // 만약 함수가 Non -null 파라미터를 원한다면 anyOrNull()을 써라
             //"any<AddMovieInfoDto>()는 null이 아니어야 합니다."라는 메시지와 함께 NullPointerException이 발생하는 경우
             // 다음 이유 중 하나가 원인일 가능성이 높습니다.
@@ -155,8 +159,7 @@ class MovieInfoControllerUnitTest {
             //
             // 2. Mocking에서 인수 유형을 명시적으로 정의합니다.
             //Kotlin의 메서드 서명이 null을 허용하지 않는 유형을 지정하는 경우 해당 유형을 명시적으로 언급해야 합니다.
-            org.mockito.kotlin.isA()
-
+            isA()
         ))
             .thenReturn(
                 Mono.just(MovieInfo
@@ -168,7 +171,7 @@ class MovieInfoControllerUnitTest {
                     LocalDate.parse("2005-06-15")
                 )))
         //when
-        webTestClient!!
+        webTestClient
             .post()
             .uri(MOVIES_INFO_URL)
             .bodyValue(addMovieInfoDto)
@@ -183,6 +186,103 @@ class MovieInfoControllerUnitTest {
             }
 
 
+    }
+
+    @Test
+    fun updateMovieInfo(){
+        //given
+        val updateMovieInfoDto: UpdateMovieInfoDto = UpdateMovieInfoDto(
+            "c",
+            "다크나이트 라이즈1000",
+            2012,
+            mutableListOf("크리스찬 베일", "톰 하디"),
+            LocalDate.parse("2012-07-20")
+        )
+        val movieInfo:String = "c"
+
+        // mocking and stubbing
+        whenever(moviesInfoService.updateMovieInfo(isA(), isA()))
+            .thenReturn(Mono.just(
+                GetMovieInfoDto(
+                    updateMovieInfoDto.movieInfoId,
+                    updateMovieInfoDto.name,
+                    updateMovieInfoDto.year,
+                    updateMovieInfoDto.cast,
+                    updateMovieInfoDto.releaseDate
+                    )
+                )
+            )
+
+        //when
+        webTestClient
+            .put()
+            .uri("$MOVIES_INFO_URL/$movieInfo")
+            .bodyValue(updateMovieInfoDto)
+            .exchange()
+            .expectStatus()
+            .is2xxSuccessful
+            .expectBody(GetMovieInfoDto::class.java)
+            .consumeWith {
+                movieInfoEntity
+                -> val responseBody: GetMovieInfoDto? = movieInfoEntity.responseBody
+                assert(responseBody != null)
+                assert(responseBody?.name == "다크나이트 라이즈1000")
+            }
+    }
+
+    @Test
+    fun deleteMovieInfo(){
+        //given
+        val movieInfoId:String = "c"
+
+        // mocking and stubbing
+        whenever(moviesInfoService.deleteMovieInfo(isA()))
+            .thenReturn(Mono.empty())
+
+        //when
+        webTestClient
+            .delete()
+            .uri("$MOVIES_INFO_URL/$movieInfoId")
+            .exchange()
+            .expectStatus()
+            .isNoContent
+            .expectBody(GetMovieInfoDto::class.java)
+            .consumeWith {
+                movieEntity
+                -> val responseBody: GetMovieInfoDto? = movieEntity.responseBody
+                assertNull(responseBody)
+            }
+
+    }
+
+    @Test
+    fun addMovieInfo_validation(){
+        //given
+        val addMovieInfoDto:AddMovieInfoDto = AddMovieInfoDto(
+            "a",
+            "배트맨 비긴즈",
+            -2005,
+            mutableListOf(""),
+            LocalDate.parse("2005-06-15")
+        )
+
+        //when
+        webTestClient
+            .post()
+            .uri(MOVIES_INFO_URL)
+            .bodyValue(addMovieInfoDto)
+            .exchange()
+            .expectStatus()
+            .isBadRequest
+            .expectBody(String::class.java)
+            .consumeWith {
+                exchageResult
+                -> val responseBody: String? = exchageResult.responseBody
+                println("responseBody : $responseBody")
+                val expectedMessage:String = "개봉 연도는 양수여야 합니다."
+                assert(responseBody!=null)
+                assertEquals(expectedMessage,responseBody)
+            }
     }
 
 
