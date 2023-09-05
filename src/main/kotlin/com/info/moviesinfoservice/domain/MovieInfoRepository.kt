@@ -8,8 +8,8 @@ import java.time.Year
 
 @Repository
 interface MovieInfoRepository: ReactiveMongoRepository<MovieInfo,String> {
-    fun findByYear(year: Int): Flux<MovieInfo>
+    suspend fun findByYear(year: Int): Flux<MovieInfo>
 
-    fun findByName(name:String): Mono<MovieInfo>
+    suspend fun findByName(name:String): Mono<MovieInfo>
 
 }

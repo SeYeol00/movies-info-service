@@ -8,10 +8,10 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 interface MoviesInfoService {
-    fun addMovieInfo(addMovieInfo: AddMovieInfoDto): Mono<MovieInfo>
-    fun getAllMovieInfos():Flux<GetMovieInfoDto>
-    fun getMovieInfoById(id:String):Mono<GetMovieInfoDto>
-    fun updateMovieInfo(id:String, updateMovieInfoDto: UpdateMovieInfoDto): Mono<GetMovieInfoDto>
-    fun deleteMovieInfo(id: String):Mono<Void>
-    fun getMovieInfoByYear(year:Int):Flux<GetMovieInfoDto>
+    suspend fun addMovieInfo(addMovieInfo: AddMovieInfoDto): Mono<MovieInfo>
+    suspend fun getAllMovieInfos():Flux<GetMovieInfoDto>
+    suspend fun getMovieInfoById(id:String):Mono<GetMovieInfoDto>
+    suspend fun updateMovieInfo(id:String, updateMovieInfoDto: UpdateMovieInfoDto): Mono<GetMovieInfoDto>
+    suspend fun deleteMovieInfo(id: String):Mono<Void>
+    suspend fun getMovieInfoByYear(year:Int):Flux<GetMovieInfoDto>
 }

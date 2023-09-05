@@ -24,7 +24,7 @@ class MoviesInfoController(
 
 
     @GetMapping("/movieinfos")
-    fun getAllMovieInfos(@RequestParam(value = "year", required = false)year:Int?): Flux<GetMovieInfoDto> {
+    suspend fun getAllMovieInfos(@RequestParam(value = "year", required = false)year:Int?): Flux<GetMovieInfoDto> {
         if (year != null){
             return moviesInfoService.getMovieInfoByYear(year).log()
         }
@@ -32,7 +32,7 @@ class MoviesInfoController(
     }
 
     @PutMapping("/movieinfos/{id}")
-    fun updateMovieInfo(@PathVariable id:String,@RequestBody updateMovieInfoDto: UpdateMovieInfoDto)
+    suspend fun updateMovieInfo(@PathVariable id:String,@RequestBody updateMovieInfoDto: UpdateMovieInfoDto)
     : Mono<ResponseEntity<GetMovieInfoDto>> {
         return moviesInfoService.updateMovieInfo(id,updateMovieInfoDto)
             .map {
@@ -45,13 +45,13 @@ class MoviesInfoController(
 
     @DeleteMapping("/movieinfos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteMovieInfo(@PathVariable id:String)
+    suspend fun deleteMovieInfo(@PathVariable id:String)
     :Mono<Void>{
         return moviesInfoService.deleteMovieInfo(id).log()
     }
 
     @GetMapping("/movieinfos/{id}")
-    fun getMovieInfoById(@PathVariable id:String)
+    suspend fun getMovieInfoById(@PathVariable id:String)
     :Mono<ResponseEntity<GetMovieInfoDto>>{
         return moviesInfoService.getMovieInfoById(id)
             .map{
@@ -64,14 +64,14 @@ class MoviesInfoController(
 
     // SSE
     @GetMapping(value = ["/movieinfos/stream"], produces = [MediaType.APPLICATION_NDJSON_VALUE])
-    fun getMovieInfoById():Flux<MovieInfo>{
+    suspend fun getMovieInfoById():Flux<MovieInfo>{
         // 실시간으로 post로 온 영화 정보를 Sink 클래스 인스턴스에 저장한 값을 계속 업데이트해서 받음
         return moviesInfoSink.asFlux().log()
     }
 
     @PostMapping("/movieinfos")
     @ResponseStatus(HttpStatus.CREATED)
-    fun addMovieInfo(@RequestBody @Valid addMovieInfoDto: AddMovieInfoDto)
+    suspend fun addMovieInfo(@RequestBody @Valid addMovieInfoDto: AddMovieInfoDto)
     :Mono<MovieInfo>{
         return moviesInfoService.addMovieInfo(addMovieInfoDto)
             // Sink에 전달해서 SSE api에 대기

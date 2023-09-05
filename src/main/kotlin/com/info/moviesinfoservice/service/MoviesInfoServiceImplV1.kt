@@ -5,6 +5,8 @@ import com.info.moviesinfoservice.domain.MovieInfoRepository
 import com.info.moviesinfoservice.dto.AddMovieInfoDto
 import com.info.moviesinfoservice.dto.GetMovieInfoDto
 import com.info.moviesinfoservice.dto.UpdateMovieInfoDto
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -13,7 +15,8 @@ import reactor.core.publisher.Mono
 class MoviesInfoServiceImplV1(
     private val movieInfoRepository: MovieInfoRepository
 ):MoviesInfoService {
-    override fun addMovieInfo(addMovieInfo: AddMovieInfoDto): Mono<MovieInfo>{
+    override suspend fun addMovieInfo(addMovieInfo: AddMovieInfoDto)
+    : Mono<MovieInfo> {
         return movieInfoRepository.save(
             MovieInfo.of(
                 addMovieInfo.movieInfoId,
@@ -26,7 +29,7 @@ class MoviesInfoServiceImplV1(
             .log()
     }
 
-    override fun getAllMovieInfos(): Flux<GetMovieInfoDto> {
+    override suspend fun getAllMovieInfos(): Flux<GetMovieInfoDto> {
         return movieInfoRepository.findAll()
             .map {
                 movieInfo
@@ -36,7 +39,7 @@ class MoviesInfoServiceImplV1(
             .log()
     }
 
-    override fun getMovieInfoById(id: String): Mono<GetMovieInfoDto> {
+    override suspend fun getMovieInfoById(id: String): Mono<GetMovieInfoDto> {
         return movieInfoRepository.findById(id)
             .map {
                 movieInfo
@@ -46,7 +49,7 @@ class MoviesInfoServiceImplV1(
             .log()
     }
 
-    override fun updateMovieInfo(id: String, updateMovieInfoDto: UpdateMovieInfoDto): Mono<GetMovieInfoDto> {
+    override suspend fun updateMovieInfo(id: String, updateMovieInfoDto: UpdateMovieInfoDto): Mono<GetMovieInfoDto> {
         return movieInfoRepository.findById(id)
             // 업데이트는 flatmap을 많이 쓴다.
             .flatMap<GetMovieInfoDto?> {
@@ -62,11 +65,11 @@ class MoviesInfoServiceImplV1(
             .log()
     }
 
-    override fun deleteMovieInfo(id: String): Mono<Void> {
+    override suspend fun deleteMovieInfo(id: String): Mono<Void> {
         return movieInfoRepository.deleteById(id).log()
     }
 
-    override fun getMovieInfoByYear(year: Int): Flux<GetMovieInfoDto> {
+    override suspend fun getMovieInfoByYear(year: Int): Flux<GetMovieInfoDto> {
         return movieInfoRepository.findByYear(year)
             .map {
                 movieInfo
